@@ -4,6 +4,7 @@ This project is about running native Debian linux on Qualcomm devices. There has
 Debian 12 - Bookworm was used as the build environment. Should also work on Debian 13 - Trixie with little or small modifications. Qualcomm device used is Motorola Moto G4 Play. I tried to make this generic enough to support many different Qualcomm chips.
 
 **Factors**
+
 There are some things to consider / collect before starting. 
 
 1.	You must be able to unlock your bootloader. There is really no way around this, you will not be able to flash your image with a locked bootloader. Search the web for your device on how to do this.
@@ -12,6 +13,7 @@ There are some things to consider / collect before starting.
 
 
 **Kernel:**
+
 ```
 sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git
 ```
@@ -50,6 +52,7 @@ cat linux/arch/arm64/boot/Image.gz linux/arch/arm64/boot/dts/qcom/msm8916-motoro
 ```
 
 **Rootfs:**
+
 ```
 sudo apt install debootstrap qemu-user-static binfmt-support android-sdk-libsparse-utils mkbootimg
 sudo debootstrap --arch arm64 --foreign bookworm rootfs http://deb.debian.org/debian
