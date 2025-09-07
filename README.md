@@ -1,7 +1,15 @@
 # debian-qualcomm
-This project is about running native Debian linux on Qualcomm devices.
+This project is about running native Debian linux on Qualcomm devices. There has been a great amount of kernel development supporting Qualcomm devices in recent years.
 
-Debian 12 - Bookworm was used as the build environment. Should also work on Debian 13 - trixie with little or small modifications. Qualcomm device used is Motorola G4 Play.
+Debian 12 - Bookworm was used as the build environment. Should also work on Debian 13 - Trixie with little or small modifications. Qualcomm device used is Motorola Moto G4 Play. I tried to make this generic enough to support many different Qualcomm chips.
+
+**Factors**
+There are some things to consider / collect before starting. 
+
+1.	You must be able to unlock your bootloader. There is really no way around this, you will not be able to flash your image with a locked bootloader. Search the web for your device on how to do this.
+2.	Does your Qualcomm chip have mainline kernel support? Search the web.
+3.	Collect Firmware drivers that support your device. There are several ways to get the firmware drivers for your device. These firmware drivers run things like display panels, wifi, modems, and touchscreens. You can extract them from android, get them from postmarketos (if supported) or search the web for them. The linux kernel will search for the firmware files in /lib/firmware/ on a linux system.
+
 
 **Kernel:**
 ```
@@ -105,5 +113,46 @@ mkbootimg --base 0x80000000 \
 Now flash boot.img and rootfs.img to device using fastboot in lk2nd.
 After reboot should get terminal on screen.
 Connect OTG adapter (may need one that supplies power to keyboard) and keyboard. You should be able to login and setup wifi using nmcli. Then you can ssh into device. Enjoy!
+
+**Post Installation notes:**
+
+By default the regular user you created will not have any sudo access. If you want to give your regular user sudo access you can (as root):
+```
+sudo usermod -aG sudo [username]
+```
+Add your regular user to the sudoers file:
+```
+sudo visudo /etc/sudoers
+```
+Now add your regular user in the next line under root:
+```
+[username] ALL=(ALL:ALL) ALL
+```
+Save, exit and reboot.
+
+
+
+If your firmware drivers are not working check:
+```
+sudo dmesg
+```
+In my case the kernel was looking for *.mdt firmware files. I only had *.mbn firmware files. mbn firmware files are just a compressed version of mdt firmware files and the kernel will still load them you just need to create a symbolic link to them.
+```
+ln -s [target_file] [link_name]
+```
+For example:
+```
+Ln -s firmware.mbn firmware.mdt
+```
+
+
+You are probably going to want to resize your main partition to fill userdata. You can check how much space is currently used / available by:
+```
+df -h
+```
+In my case(yours may be different) the main partition is /dev/mmcblk0p41(largest partition). So to maximize it you can do:
+```
+sudo resize2fs /dev/mmcblk0p41
+```
 
 
