@@ -3,7 +3,7 @@ This project is about running native Debian linux on Qualcomm devices. There has
 
 Debian 12 - Bookworm was used as the build environment. Should also work on Debian 13 - Trixie with little or small modifications. Qualcomm device used is Motorola Moto G4 Play. I tried to make this generic enough to support many different Qualcomm chips.
 
-**Factors**
+## Factors
 
 There are some things to consider / collect before starting. 
 
@@ -12,12 +12,12 @@ There are some things to consider / collect before starting.
 3.	Collect Firmware drivers that support your device. There are several ways to get the firmware drivers for your device. These firmware drivers run things like display panels, wifi, modems, and touchscreens. You can extract them from android, get them from postmarketos (if supported) or search the web for them. The linux kernel will search for the firmware files in /lib/firmware/ on a linux system.
 
 
-**Kernel:**
+## Kernel:
 
 ```
 sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git
 ```
-NOTE: This may be a different repository depending on your qualcomm chip!
+#FF0000 NOTE: This may be a different repository depending on your qualcomm chip!
 ```
 git clone https://github.com/msm8916-mainline/linux --depth 1
 ```
@@ -40,8 +40,8 @@ DPKG_FLAGS="-d" make deb-pkg
 ```
 After the kernel compiles there are four files important to us:
 1.	arch/arm64/boot/Image.gz – this is the compressed kernel image
-1.	arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb – this is the device tree dtb (NOTE: This may be named different depending on your qualcomm device!)
-2.	../ linux-image-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb and ../ linux-headers-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb - kernel header files and system files converted  into kernel deb packages. (NOTE: The names may be different depending on which mainline kernel you are building!)
+1.	arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb – this is the device tree dtb #FF0000 (NOTE: This may be named different depending on your qualcomm device!)
+2.	../ linux-image-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb and ../ linux-headers-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb - kernel header files and system files converted  into kernel deb packages. #FF0000 (NOTE: The names may be different depending on which mainline kernel you are building!)
 
 ```
 cd ..
@@ -51,7 +51,7 @@ Now we append the device tree to the kernel image. NOTE: This may be named diffe
 cat linux/arch/arm64/boot/Image.gz linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb > kernel-dtb
 ```
 
-**Rootfs:**
+## Rootfs:
 
 ```
 sudo apt install debootstrap qemu-user-static binfmt-support android-sdk-libsparse-utils mkbootimg
@@ -132,7 +132,7 @@ Now flash boot.img and rootfs.img to device using fastboot in lk2nd.
 After reboot should get terminal on screen.
 Connect OTG adapter (may need one that supplies power to keyboard) and keyboard. You should be able to login and setup wifi using nmcli. Then you can ssh into device. Enjoy!
 
-**Post Installation notes:**
+## Post Installation Notes:
 
 By default the regular user you created will not have any sudo access. If you want to give your regular user sudo access you can (as root):
 ```
