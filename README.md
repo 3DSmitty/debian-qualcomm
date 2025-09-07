@@ -172,7 +172,7 @@ df -h
 ```
 In my case(yours may be different) the main partition is /dev/mmcblk0p41(largest partition). So to maximize it you can do:
 ```
-sudo resize2fs /dev/mmcblk0p41
+sudo resize2fs -f /dev/mmcblk0p41
 ```
 
 ## Resources
