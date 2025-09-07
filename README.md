@@ -179,6 +179,8 @@ sudo resize2fs /dev/mmcblk0p41
 
 https://postmarketos.org
 
+https://github.com/msm8916-mainline/lk2nd
+
 https://github.com/umeiko/KlipperPhonesLinux
 
 https://lithiumee.xlog.app/redmi2
