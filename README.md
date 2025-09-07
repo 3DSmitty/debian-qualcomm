@@ -17,7 +17,7 @@ There are some things to consider / collect before starting.
 ```
 sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git
 ```
-`#FF0000` NOTE: This may be a different repository depending on your qualcomm chip!
+<font color="red">NOTE: This may be a different repository depending on your qualcomm chip!</font>
 ```
 git clone https://github.com/msm8916-mainline/linux --depth 1
 ```
