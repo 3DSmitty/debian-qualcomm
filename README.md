@@ -128,7 +128,7 @@ mkbootimg --base 0x80000000 \
         --kernel kernel-dtb -o boot.img
 ```
 
-Now flash boot.img and rootfs.img to device using fastboot in lk2nd.
+Now flash **boot.img** and **rootfs.img** to device using fastboot in lk2nd.
 After reboot should get terminal on screen.
 Connect OTG adapter (may need one that supplies power to keyboard) and keyboard. You should be able to login and setup wifi using nmcli. Then you can ssh into device. Enjoy!
 
@@ -174,7 +174,11 @@ sudo resize2fs /dev/mmcblk0p41
 ```
 
 ## Resources
-https://postmarketos.org/
+
+https://postmarketos.org
+
 https://github.com/umeiko/KlipperPhonesLinux
+
 https://lithiumee.xlog.app/redmi2
+
 
