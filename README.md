@@ -48,7 +48,7 @@ After the kernel compiles there are four files important to us:
 ```
 cd ..
 ```
-Now we append the device tree to the kernel image. NOTE: This may be named different depending on your qualcomm device!
+Now we append the device tree to the kernel image. **NOTE: This may be named different depending on your qualcomm device!**
 ```
 cat linux/arch/arm64/boot/Image.gz linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb > kernel-dtb
 ```
