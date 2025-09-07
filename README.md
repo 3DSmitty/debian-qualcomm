@@ -1,7 +1,7 @@
 # debian-qualcomm
 This project is about running native Debian linux on Qualcomm devices. There has been a great amount of kernel development supporting Qualcomm devices in recent years.
 
-Debian 12 - Bookworm was used as the build environment. Should also work on Debian 13 - Trixie with little or small modifications. Qualcomm device used is Motorola Moto G4 Play. I tried to make this generic enough to support many different Qualcomm chips.
+Debian 12 - Bookworm was used as the build environment. Should also work on Debian 13 - Trixie with little or small modifications. Qualcomm device used is Motorola Moto G4 Play. I tried to make this generic enough to support many different Qualcomm chips. A lot of this can probably be put into scripts and it is on my TODO list.
 
 ## Factors
 
