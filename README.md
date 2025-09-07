@@ -16,6 +16,8 @@ There are some things to consider / collect before starting.
 
 ```
 sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git
+mkdir debian-qualcomm
+cd debian-qualcomm
 ```
 **NOTE: This may be a different repository depending on your qualcomm chip!**
 ```
