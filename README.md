@@ -15,6 +15,7 @@ There are some things to consider / collect before starting.
 ```
 sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git
 ```
+NOTE: This may be a different repository depending on your qualcomm chip!
 ```
 git clone https://github.com/msm8916-mainline/linux --depth 1
 ```
@@ -35,9 +36,15 @@ dpkg-checkbuilddeps: error: Unmet build dependencies: libssl-dev
 ```
 DPKG_FLAGS="-d" make deb-pkg
 ```
+After the kernel compiles there are four files important to us:
+1.	arch/arm64/boot/Image.gz – this is the compressed kernel image
+1.	arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb – this is the device tree dtb (NOTE: This may be named different depending on your qualcomm device!)
+2.	../ linux-image-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb and ../ linux-headers-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb - kernel header files and system files converted  into kernel deb packages. (NOTE: The names may be different depending on which mainline kernel you are building!)
+
 ```
 cd ..
 ```
+Now we append the device tree to the kernel image. NOTE: This may be named different depending on your qualcomm device!
 ```
 cat linux/arch/arm64/boot/Image.gz linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb > kernel-dtb
 ```
@@ -57,15 +64,14 @@ sudo chroot rootfs bash
 ```
 /debootstrap/debootstrap --second-stage
 apt update
-apt install usbutils wpasupplicant network-manager sudo fdisk vim nano openssh-server iputils-ping wget curl iproute2 dialog locales kmod zip unzip u-boot-tools initramfs-tools net-tools htop screenfetch
+apt install usbutils wpasupplicant network-manager sudo fdisk vim nano openssh-server iputils-ping wget curl iproute2 dialog locales kmod zip unzip u-boot-tools initramfs-tools net-tools htop screenfetch ntp
 dpkg-reconfigure locales
 exit
 ```
 
-(NOTE: Name of .deb packages may be different.)
 ```
-sudo cp -a linux-image-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb rootfs/root/
-sudo cp -a linux-headers-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb rootfs/root/
+sudo cp -a linux-image*.deb rootfs/root/
+sudo cp -a linux-headers*.deb rootfs/root/
 sudo chroot rootfs bash
 cd root
 dpkg -i *.deb
@@ -79,7 +85,16 @@ cp -a ~/rootfs/boot/initrd* ~/initrd.img
 (NOTE: copy firmware to chroot, this maybe different depending on system)
 ```
 sudo cp -a ~/firmware/* ~/rootfs/lib/firmware/
+sudo chroot rootfs bash
 ```
+
+```
+chown root:root /lib/firmware/*
+chmod 755 /lib/firmware/*
+update-initramfs -c -k all
+exit
+```
+
 ```
 sudo umount rootfs/dev/pts
 sudo umount rootfs/dev 
