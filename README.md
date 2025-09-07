@@ -17,7 +17,7 @@ There are some things to consider / collect before starting.
 ```
 sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git
 ```
-<font color="red">NOTE: This may be a different repository depending on your qualcomm chip!</font>
+**NOTE: This may be a different repository depending on your qualcomm chip!**
 ```
 git clone https://github.com/msm8916-mainline/linux --depth 1
 ```
@@ -40,8 +40,8 @@ DPKG_FLAGS="-d" make deb-pkg
 ```
 After the kernel compiles there are four files important to us:
 1.	arch/arm64/boot/Image.gz – this is the compressed kernel image
-1.	arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb – this is the device tree dtb #FF0000 (NOTE: This may be named different depending on your qualcomm device!)
-2.	../ linux-image-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb and ../ linux-headers-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb - kernel header files and system files converted  into kernel deb packages. #FF0000 (NOTE: The names may be different depending on which mainline kernel you are building!)
+1.	arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb – this is the device tree dtb **(NOTE: This may be named different depending on your qualcomm device!)**
+2.	../ linux-image-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb and ../ linux-headers-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb - kernel header files and system files converted  into kernel deb packages. **(NOTE: The names may be different depending on which mainline kernel you are building!)**
 
 ```
 cd ..
@@ -85,7 +85,7 @@ exit
 ```
 cp -a ~/rootfs/boot/initrd* ~/initrd.img
 ```
-(NOTE: copy firmware to chroot, this maybe different depending on system)
+**NOTE: copy firmware to chroot, this maybe different depending on system**
 ```
 sudo cp -a ~/firmware/* ~/rootfs/lib/firmware/
 sudo chroot rootfs bash
@@ -111,7 +111,7 @@ sync
 sudo umount /mnt/rootfs_dd/
 img2simg rootfs.ext4 rootfs.img
 ```
-(NOTE: Get UUID for mkbootimg kernel cmdline)
+**NOTE: Get UUID for mkbootimg kernel cmdline**
 ```
 sudo dumpe2fs rootfs.ext4 | grep UUID
 ```
@@ -173,4 +173,8 @@ In my case(yours may be different) the main partition is /dev/mmcblk0p41(largest
 sudo resize2fs /dev/mmcblk0p41
 ```
 
+## Resources
+https://postmarketos.org/
+https://github.com/umeiko/KlipperPhonesLinux
+https://lithiumee.xlog.app/redmi2
 
