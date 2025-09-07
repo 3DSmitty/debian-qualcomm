@@ -112,7 +112,7 @@ img2simg rootfs.ext4 rootfs.img
 
 sudo dumpe2fs rootfs.ext4 | grep UUID
 
-
+'''
 mkbootimg --base 0x80000000 \
         --kernel_offset 0x00080000 \
         --ramdisk_offset 0x02000000 \
@@ -122,7 +122,7 @@ mkbootimg --base 0x80000000 \
         --ramdisk initrd.img \
         --cmdline "earlycon console=tty0 console=ttyMSM0,115200 root=UUID=894a654a-fd79-464b-99ae-d83b4cd35382 rw loglevel=7"\
         --kernel kernel-dtb -o boot.img
-
+'''
 
 Now flash boot.img and rootfs.img to device using fastboot in lk2nd.
 After reboot should get terminal on screen.
