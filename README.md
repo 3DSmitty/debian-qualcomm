@@ -4,7 +4,7 @@ This project is about running native Debian linux on Qualcomm devices.
 Debian 12 - Bookworm was used as the build environment. Should also work on Debian 13 - trixie with little or small modifications. Qualcomm device used is Motorola G4 Play.
 
 Kernel:
-sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git
+'sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git'
 
 git clone https://github.com/msm8916-mainline/linux --depth 1
 
