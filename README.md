@@ -88,7 +88,7 @@ exit
 ```
 **NOTE: copy firmware to chroot, this maybe different depending on system**
 ```
-sudo cp -a ~/firmware/* ~/rootfs/lib/firmware/
+sudo cp -a ~/firmware/* rootfs/lib/firmware/
 sudo chroot rootfs bash
 ```
 
