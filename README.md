@@ -78,6 +78,8 @@ exit
 sudo cp -a linux-image*.deb rootfs/root/
 sudo cp -a linux-headers*.deb rootfs/root/
 sudo chroot rootfs bash
+```
+```
 cd root
 dpkg -i *.deb
 adduser debian
