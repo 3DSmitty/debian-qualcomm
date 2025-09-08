@@ -69,7 +69,7 @@ sudo chroot rootfs bash
 ```
 /debootstrap/debootstrap --second-stage
 apt update
-apt install usbutils wpasupplicant network-manager sudo vim openssh-server wget curl dialog locales zip u-boot-tools initramfs-tools net-tools htop screenfetch ntp
+apt install usbutils wpasupplicant network-manager sudo vim openssh-server wget curl dialog locales zip u-boot-tools initramfs-tools net-tools htop ntp
 dpkg-reconfigure locales
 exit
 ```
