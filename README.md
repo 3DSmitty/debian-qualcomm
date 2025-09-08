@@ -99,7 +99,7 @@ update-initramfs -c -k all
 exit
 ```
 ```
-cp -a ~/rootfs/boot/initrd* ~/initrd.img
+cp -a rootfs/boot/initrd* initrd.img
 ```
 ```
 sudo umount rootfs/dev/pts
