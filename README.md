@@ -93,8 +93,8 @@ sudo chroot rootfs bash
 ```
 
 ```
-chown root:root /lib/firmware/*
-chmod 755 /lib/firmware/*
+chown -R root:root /lib/firmware/*
+chmod -R 755 /lib/firmware/*
 update-initramfs -c -k all
 exit
 ```
