@@ -48,7 +48,7 @@ After the kernel compiles there are four files important to us:
 ```
 cd ..
 ```
-Now we append the device tree to the kernel image. **NOTE: This may be named different depending on your qualcomm device!**
+Now we append the device tree to the kernel image. **(NOTE: This may be named different depending on your qualcomm device!)**
 ```
 cat linux/arch/arm64/boot/Image.gz linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb > kernel-dtb
 ```
@@ -84,9 +84,6 @@ adduser debian
 passwd
 exit
 ```
-```
-cp -a ~/rootfs/boot/initrd* ~/initrd.img
-```
 **NOTE: copy firmware to chroot, this maybe different depending on system**
 ```
 sudo cp -a ~/firmware/* ~/rootfs/lib/firmware/
@@ -99,7 +96,9 @@ chmod 755 /lib/firmware/*
 update-initramfs -c -k all
 exit
 ```
-
+```
+cp -a ~/rootfs/boot/initrd* ~/initrd.img
+```
 ```
 sudo umount rootfs/dev/pts
 sudo umount rootfs/dev 
