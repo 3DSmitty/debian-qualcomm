@@ -119,6 +119,7 @@ img2simg rootfs.ext4 rootfs.img
 sudo dumpe2fs rootfs.ext4 | grep UUID
 ```
 
+**NOTE: These values may be named different depending on your qualcomm device!**
 ```
 mkbootimg --base 0x80000000 \
         --kernel_offset 0x00080000 \
