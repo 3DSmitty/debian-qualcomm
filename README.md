@@ -103,8 +103,8 @@ exit
 cp -a rootfs/boot/initrd* initrd.img
 ```
 ```
-sudo umount rootfs/dev/pts
-sudo umount rootfs/dev 
+sudo umount rootfs/dev
+sudo umount rootfs/sys
 sudo umount rootfs/proc
 dd if=/dev/zero of=rootfs.ext4 bs=1M count=4096
 sudo mkfs.ext4 rootfs.ext4
