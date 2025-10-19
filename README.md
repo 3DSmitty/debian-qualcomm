@@ -25,9 +25,9 @@ git clone https://github.com/msm8916-mainline/linux --depth 1
 ```
 ```
 cd linux
+make mrproper
 export CROSS_COMPILE=aarch64-linux-gnu-
 export ARCH=arm64
-make mrproper
 make msm8916_defconfig
 make menuconfig
 make -j$(nproc) Image.gz dtbs
