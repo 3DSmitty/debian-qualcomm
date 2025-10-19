@@ -62,7 +62,7 @@ sudo cp -a /usr/bin/qemu-aarch64-static rootfs/usr/bin/qemu-aarch64-static
 ```
 ```
 sudo mount --bind /dev rootfs/dev
-sudo mount --bind /dev/pts rootfs/dev/pts
+sudo mount --bind /sys rootfs/sys
 sudo mount --bind /proc rootfs/proc
 sudo chroot rootfs bash
 ```
