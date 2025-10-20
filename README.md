@@ -30,7 +30,7 @@ export CROSS_COMPILE=aarch64-linux-gnu-
 export ARCH=arm64
 make msm8916_defconfig
 make menuconfig
-make -j$(nproc) Image.gz dtbs
+make -j$(nproc) Image.xz dtbs #uses a high compression mode to reduce size on boot.img (reduce chances of boot size too large)
 make deb-pkg
 ```
 
@@ -38,7 +38,7 @@ If you get a
 
 dpkg-checkbuilddeps: error: Unmet build dependencies: libssl-dev
 ```
-DPKG_FLAGS="-d" make deb-pkg
+DPKG_FLAGS="-d" DEB_BUILD_OPTIONS="parallel=$(nproc) compress=xz" make -j$(nproc) deb-pkg #use max compression and CPUs to finish task fast
 ```
 After the kernel compiles there are four files important to us:
 1.	arch/arm64/boot/Image.gz – this is the compressed kernel image
@@ -69,9 +69,11 @@ sudo chroot rootfs bash
 ```
 /debootstrap/debootstrap --second-stage
 apt update
-apt install usbutils wpasupplicant network-manager sudo vim openssh-server wget curl dialog locales zip u-boot-tools initramfs-tools net-tools ntp
+apt install -y --no-install-recommends usbutils wpasupplicant network-manager sudo nano openssh-server wget curl dialog locales zip u-boot-tools initramfs-tools net-tools ntp #install minimal packages that helps reduce size of initramfs.img, install only necessary packages and dependencies
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
+apt clean #clear apt cache
+rm -rf /usr/share/doc/* /usr/share/man/* /usr/share/locale/* #delete docs and useless files (secure)
 exit
 ```
 
