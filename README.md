@@ -50,7 +50,7 @@ cd ..
 ```
 Now we append the device tree to the kernel image. **(NOTE: This may be named different depending on your qualcomm device!)**
 ```
-cat linux/arch/arm64/boot/Image.gz linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb > kernel-dtb
+cat linux/arch/arm64/boot/Image.xz linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb > kernel-dtb
 ```
 
 ## Rootfs:
@@ -141,6 +141,8 @@ Connect OTG adapter (may need one that supplies power to keyboard) and keyboard.
 
 ## Post Installation Notes:
 
+### User Sudo
+
 By default the regular user you created will not have any sudo access. If you want to give your regular user sudo access you can (as root):
 ```
 sudo usermod -aG sudo [username]
@@ -155,7 +157,7 @@ Now add your regular user in the next line under root:
 ```
 Save, exit and reboot.
 
-
+### Firmware Drivers
 
 If your firmware drivers are not working check:
 ```
@@ -170,6 +172,7 @@ For example:
 Ln -s firmware.mbn firmware.mdt
 ```
 
+### Resize Main Partition
 
 You are probably going to want to resize your main partition to fill userdata. You can check how much space is currently used / available by:
 ```
