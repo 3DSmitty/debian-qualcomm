@@ -30,7 +30,7 @@ export CROSS_COMPILE=aarch64-linux-gnu-
 export ARCH=arm64
 make msm8916_defconfig
 make menuconfig
-make -j$(nproc) Image.gz dtbs #uses a high compression mode to reduce size on boot.img (reduce chances of boot size too large)
+make -j$(nproc) Image.gz dtbs
 make deb-pkg
 ```
 
@@ -38,7 +38,7 @@ If you get a
 
 dpkg-checkbuilddeps: error: Unmet build dependencies: libssl-dev
 ```
-DPKG_FLAGS="-d" DEB_BUILD_OPTIONS="parallel=$(nproc)" make -j$(nproc) deb-pkg #use max compression and CPUs to finish task fast
+DPKG_FLAGS="-d" DEB_BUILD_OPTIONS="parallel=$(nproc)" make -j$(nproc) deb-pkg
 ```
 After the kernel compiles there are four files important to us:
 1.	arch/arm64/boot/Image.gz – this is the compressed kernel image
