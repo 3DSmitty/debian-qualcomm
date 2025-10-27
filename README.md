@@ -30,7 +30,7 @@ export CROSS_COMPILE=aarch64-linux-gnu-
 export ARCH=arm64
 make msm8916_defconfig
 make menuconfig
-make -j$(nproc) KBUILD_GZIP_MAX_COMPRESSION=9 Image.gz dtbs #uses a high compression mode to reduce size on boot.img (reduce chances of boot size too large)
+make -j$(nproc) KBUILD_GZIP_MAX_COMPRESSION=9 Image.gz dtbs #uses a high compression mode to reduce size on boot.img (reduce the chance of boot size too large)
 make deb-pkg
 ```
 
@@ -59,6 +59,7 @@ cat linux/arch/arm64/boot/Image.gz linux/arch/arm64/boot/dts/qcom/msm8916-motoro
 sudo apt install debootstrap qemu-user-static binfmt-support android-sdk-libsparse-utils mkbootimg
 sudo debootstrap --arch arm64 --foreign bookworm rootfs http://deb.debian.org/debian
 sudo cp -a /usr/bin/qemu-aarch64-static rootfs/usr/bin/qemu-aarch64-static
+# If you want the new version of Debian, you can use teh command: sudo debootstrap --arch arm64 --foreign --variant=minbase trixie rootfs http://deb.debian.org/debian
 ```
 ```
 sudo mount --bind /dev rootfs/dev
