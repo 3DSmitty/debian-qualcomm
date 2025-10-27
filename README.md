@@ -30,7 +30,7 @@ export CROSS_COMPILE=aarch64-linux-gnu-
 export ARCH=arm64
 make msm8916_defconfig
 make menuconfig
-make -j$(nproc) Image.gz dtbs #uses a high compression mode to reduce size on boot.img (reduce chances of boot size too large)
+make -j$(nproc) KBUILD_GZIP_MAX_COMPRESSION=9 Image.gz dtbs #uses a high compression mode to reduce size on boot.img (reduce chances of boot size too large)
 make deb-pkg
 ```
 
@@ -69,7 +69,7 @@ sudo chroot rootfs bash
 ```
 /debootstrap/debootstrap --second-stage
 apt update
-apt install -y --no-install-recommends usbutils wpasupplicant network-manager sudo nano openssh-server wget curl dialog locales zip u-boot-tools initramfs-tools net-tools ntp #install minimal packages that helps reduce size of initramfs.img, install only necessary packages and dependencies
+apt install -y --no-install-recommends usbutils wpasupplicant network-manager sudo nano openssh-server wget curl dialog locales zip u-boot-tools initramfs-tools net-tools htop xz-utils #install minimal packages that helps reduce size of initramfs.img, install only necessary packages and dependencies
 dpkg-reconfigure locales
 dpkg-reconfigure tzdata
 apt clean #clear apt cache
