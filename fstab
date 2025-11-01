@@ -1,0 +1,3 @@
+# <file system> <mount point> <type> <options> <dump> <pass>
+UUID=c315506d-0366-4405-9a0d-f2d51e722da5 / ext4 defaults 0 0
+UUID=1b82770e-2275-45d0-974b-438994b3fe53 /boot ext2 nodev,nosuid,noexec 0 0
