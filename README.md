@@ -1,7 +1,7 @@
 # debian-qualcomm
 This project is about running native Debian linux on Qualcomm devices. There has been a great amount of kernel development supporting Qualcomm devices in recent years.
 
-Debian 12 - Bookworm was used as the build environment. Should also work on Debian 13 - Trixie with little or small modifications. Qualcomm device used is Motorola Moto G4 Play. I tried to make this generic enough to support many different Qualcomm chips. A lot of this can probably be put into scripts and it is on my TODO list.
+Debian 13 - Trixie was used as the build environment. Should also work on Debian 12 - Bookworm with little or small modifications. Qualcomm device used is Motorola Moto G4 Play. I tried to make this generic enough to support many different Qualcomm chips. A lot of this can probably be put into scripts and it is on my TODO list.
 
 ## Factors
 
@@ -16,7 +16,7 @@ There are some things to consider / collect before starting.
 
 ```
 sudo apt install build-essential crossbuild-essential-arm64 libssl-dev flex bison libelf-dev pahole dwarves libncurses-dev debhelper-compat rsync git
-mkdir debian-qualcomm
+git clone https://github.com/3DSmitty/debian-qualcomm.git
 cd debian-qualcomm
 ```
 **NOTE: This may be a different repository depending on your qualcomm chip!**
@@ -29,35 +29,28 @@ make mrproper
 export CROSS_COMPILE=aarch64-linux-gnu-
 export ARCH=arm64
 make msm8916_defconfig
-make menuconfig
-make -j$(nproc) Image.gz dtbs
-make deb-pkg
-```
-
-If you get a
-
-dpkg-checkbuilddeps: error: Unmet build dependencies: libssl-dev
-```
+make menuconfig # make any changes you want or just save and exit
 DPKG_FLAGS="-d" DEB_BUILD_OPTIONS="parallel=$(nproc)" make -j$(nproc) deb-pkg
-```
-After the kernel compiles there are four files important to us:
-1.	arch/arm64/boot/Image.gz – this is the compressed kernel image
-1.	arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb – this is the device tree dtb **(NOTE: This may be named different depending on your qualcomm device!)**
-2.	../ linux-image-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb and ../ linux-headers-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb - kernel header files and system files converted  into kernel deb packages. **(NOTE: The names may be different depending on which mainline kernel you are building!)**
-
-```
 cd ..
 ```
-Now we append the device tree to the kernel image. **(NOTE: This may be named different depending on your qualcomm device!)**
-```
-cat linux/arch/arm64/boot/Image.xz linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb > kernel-dtb
-```
+After the kernel compiles it creates a neat deb package with the kernel and it's headers. There are a few files important to us:
+1.	linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb – this is the device tree dtb **(NOTE: This may be named different depending on your qualcomm device!)**
+2.	linux-image-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb and linux-headers-6.12.1-msm8916-g1728ab7f6075_6.12.1-g1728ab7f6075-5_arm64.deb - kernel header files and system files converted  into kernel deb packages. **(NOTE: The names may be different depending on which mainline kernel you are building!)**
+
 
 ## Rootfs:
 
 ```
-sudo apt install debootstrap qemu-user-static binfmt-support android-sdk-libsparse-utils mkbootimg
-sudo debootstrap --arch arm64 --foreign bookworm rootfs http://deb.debian.org/debian
+sudo apt install debootstrap qemu-user-static binfmt-support android-sdk-libsparse-utils mkbootimg kpartx
+dd if=/dev/zero of=rootfs.ext4 bs=1M count=4096
+sudo mkfs.ext4 rootfs.ext4
+sudo mkdir rootfs
+sudo mount rootfs.ext4 rootfs
+dd if=/dev/zero of=bootfs.ext2 bs=1M count=512
+sudo mkfs.ext2 bootfs.ext2
+sudo mkdir rootfs/boot
+sudo mount bootfs.ext2 rootfs/boot
+sudo debootstrap --arch arm64 --foreign trixie rootfs http://deb.debian.org/debian
 sudo cp -a /usr/bin/qemu-aarch64-static rootfs/usr/bin/qemu-aarch64-static
 ```
 ```
@@ -68,74 +61,68 @@ sudo chroot rootfs bash
 ```
 ```
 /debootstrap/debootstrap --second-stage
-apt update
-apt install -y --no-install-recommends usbutils wpasupplicant network-manager sudo nano openssh-server wget curl dialog locales zip u-boot-tools initramfs-tools net-tools ntp #install minimal packages that helps reduce size of initramfs.img, install only necessary packages and dependencies
-dpkg-reconfigure locales
-dpkg-reconfigure tzdata
-apt clean #clear apt cache
-rm -rf /usr/share/doc/* /usr/share/man/* /usr/share/locale/* #delete docs and useless files (secure)
 exit
-```
-
-```
-sudo cp -a linux-image*.deb rootfs/root/
-sudo cp -a linux-headers*.deb rootfs/root/
-sudo chroot rootfs bash
-```
-```
-cd root
-dpkg -i *.deb
-adduser debian
-passwd
-exit
-```
-**NOTE: copy firmware to chroot, this maybe different depending on system**
-```
-sudo cp -a ~/firmware/* rootfs/lib/firmware/
-sudo chroot rootfs bash
-```
-
-```
-chown -R root:root /lib/firmware/*
-chmod -R 755 /lib/firmware/*
-update-initramfs -c -k all
-exit
-```
-```
-cp -a rootfs/boot/initrd* initrd.img
 ```
 ```
 sudo umount rootfs/dev
 sudo umount rootfs/sys
 sudo umount rootfs/proc
-dd if=/dev/zero of=rootfs.ext4 bs=1M count=4096
-sudo mkfs.ext4 rootfs.ext4
-sudo mkdir /mnt/rootfs_dd
-sudo mount rootfs.ext4 /mnt/rootfs_dd
-sudo cp -a rootfs/. /mnt/rootfs_dd/
-sync
-sudo umount /mnt/rootfs_dd/
+sudo mount --bind /dev rootfs/dev
+sudo mount --bind /sys rootfs/sys
+sudo mount --bind /proc rootfs/proc
+sudo chroot rootfs bash
+```
+```
+apt update
+apt install -y usbutils wpasupplicant network-manager sudo nano openssh-server wget curl dialog locales zip u-boot-tools initramfs-tools net-tools ntpsec
+dpkg-reconfigure locales
+dpkg-reconfigure tzdata
+mkdir /boot/extlinux
+exit
+```
+```
+sudo blkid /dev/loop0 # This is root partition record UUID for later
+sudo blkid /dev/loop1 # This is boot partition record UUID for later
+sudo cp -a linux-image*.deb rootfs/root/
+sudo cp -a linux-headers*.deb rootfs/root/
+sudo cp -a linux/arch/arm64/boot/dts/qcom/msm8916-motorola-harpia.dtb rootfs/boot/
+sudo cp -a ~/firmware/* rootfs/lib/firmware/
+sudo cp -a extlinux.conf rootfs/boot/extlinux/
+sudo cp -a fstab rootfs/etc/
+sudo chroot rootfs bash
+```
+```
+chown -R root:root /boot/*.dtb
+chmod -R 755 /boot/*.dtb
+chown -R root:root /lib/firmware/*
+chmod -R 755 /lib/firmware/*
+chown -R root:root /boot/extlinux/extlinux.conf
+chmod -R 755 /boot/extlinux/extlinux.conf
+chown -R root:root /etc/fstab
+chmod -R 755 /etc/fstab
+cd /root
+dpkg -i *.deb
+adduser debian # replace with primary username
+passwd
+nano /etc/fstab # edit boot UUID and root UUID
+nano /boot/extlinux/extlinux.conf # edit kernel, dtb, initrd names (must match exactly what is in /boot) and edit root UUID 
+update-initramfs -c -k all
+exit
+```
+```
+sudo umount rootfs/dev
+sudo umount rootfs/sys
+sudo umount rootfs/proc
+sudo umount rootfs/boot
+sudo umount rootfs
+
+sudo kpartx -d bootfs.ext2
+sudo kpartx -d rootfs.ext4
+
+img2simg bootfs.ext2 bootfs.img
 img2simg rootfs.ext4 rootfs.img
 ```
-**NOTE: Get UUID for mkbootimg kernel cmdline**
-```
-sudo dumpe2fs rootfs.ext4 | grep UUID
-```
-
-**NOTE: These values may be named different depending on your qualcomm device!**
-```
-mkbootimg --base 0x80000000 \
-        --kernel_offset 0x00080000 \
-        --ramdisk_offset 0x02000000 \
-        --tags_offset 0x01e00000 \
-        --pagesize 2048 \
-        --second_offset 0x00f00000 \
-        --ramdisk initrd.img \
-        --cmdline "earlycon console=tty0 console=ttyMSM0,115200 root=UUID=894a654a-fd79-464b-99ae-d83b4cd35382 rw loglevel=7"\
-        --kernel kernel-dtb -o boot.img
-```
-
-Now flash **boot.img** and **rootfs.img** to device using fastboot in lk2nd.
+Now flash lk2nd to android boot, **bootfs.img** to android system, and **rootfs.img** to android userdata using fastboot.
 After reboot should get terminal on screen.
 Connect OTG adapter (may need one that supplies power to keyboard) and keyboard. You should be able to login and setup wifi using nmcli. Then you can ssh into device. Enjoy!
 
@@ -192,5 +179,7 @@ https://github.com/msm8916-mainline/lk2nd
 https://github.com/umeiko/KlipperPhonesLinux
 
 https://lithiumee.xlog.app/redmi2
+
+https://wiki.gentoo.org/wiki/BQ_Aquaris_X_Pro_(Bardockpro)
 
 
