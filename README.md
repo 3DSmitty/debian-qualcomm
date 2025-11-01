@@ -52,8 +52,6 @@ sudo mkdir rootfs/boot
 sudo mount bootfs.ext2 rootfs/boot
 sudo debootstrap --arch arm64 --foreign trixie rootfs http://deb.debian.org/debian
 sudo cp -a /usr/bin/qemu-aarch64-static rootfs/usr/bin/qemu-aarch64-static
-```
-```
 sudo mount --bind /dev rootfs/dev
 sudo mount --bind /sys rootfs/sys
 sudo mount --bind /proc rootfs/proc
