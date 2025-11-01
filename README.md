@@ -122,7 +122,7 @@ sudo kpartx -d rootfs.ext4
 img2simg bootfs.ext2 bootfs.img
 img2simg rootfs.ext4 rootfs.img
 ```
-Now flash lk2nd to android boot, **bootfs.img** to android system, and **rootfs.img** to android userdata using fastboot.
+Now flash **lk2nd** to android **boot**, **bootfs.img** to android **system**, and **rootfs.img** to android **userdata** using fastboot.
 After reboot should get terminal on screen.
 Connect OTG adapter (may need one that supplies power to keyboard) and keyboard. You should be able to login and setup wifi using nmcli. Then you can ssh into device. Enjoy!
 
