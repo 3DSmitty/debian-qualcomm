@@ -103,7 +103,7 @@ dpkg -i *.deb
 adduser debian # replace with primary username
 passwd
 nano /etc/fstab # edit boot UUID and root UUID
-nano /boot/extlinux/extlinux.conf # edit kernel, dtb, initrd names (must match exactly what is in /boot) and edit root UUID 
+nano /boot/extlinux/extlinux.conf # edit kernel, dtb, initrd names (must match exactly what is in rootfs/boot) and edit root UUID 
 update-initramfs -c -k all
 exit
 ```
